@@ -49,33 +49,30 @@ int checkPassword(char * password, char * hash)
     return 1;
 }
 
-char * recur(int length)
+char * recur(int position, int length, char * password)
 {
-    char generatedPassword[9];
-     return "hi";       
+    char newPassword[length];
+    // strcpy(newPassword, password);
+    printf("\nposition: %i, length: %i\n", position, length);
+    printf("newPassword: %.*s\n", length, newPassword); 
+    
+    // for (int m = 32; m < 127; m++)
+    // {
+    //     newPassword[position - 1] = m;
+    //     printf("%i: %s --", m, newPassword);
+    // }
+   
+    if (position < length)
+    { 
+        recur(position + 1, length, "");
+    }
+    
+    return "hi";
 }
 
 int main(void)
 {
-    // 32 - 126
-    
     char * hash = "50Bpa7n/23iug";
-    // char * password = "12345";
-    char * password = recur(10);
-    // printf("%s", password);
-    
+    char * password = recur(1, 2, "");
+    printf("\n");
 }
-
-
-
-
- // for (int k = 0; k < 8; k++){
-    //     for (int l = 0; l < k + 1; l++){
-    //     generatedPassword[l+1] = 0;
-    //         for (int m = 32; m < 127; m++){
-    //             generatedPassword[l] = m;
-    //             printf("%s ", generatedPassword);
-    //             // checkPassword(generatedPassword, hash);
-    //         }    
-    //     }
-    // }
