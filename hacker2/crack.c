@@ -1,64 +1,75 @@
 #include <stdio.h>
+#include <string.h>
+
+// Macbook Libraries
 #define _XOPEN_SOURCE
 #include <unistd.h>
-#include <string.h>
+
+// Cloud 9 Libraries 
+// #define _GNU_SOURCE
 // #include <crypt.h>
 
-// crack.c is a program that cracks fake old UNIX passwords
+/*
+ * crack.c is a program that cracks fake old UNIX passwords
+ *
+ * Compile and test command 
+ * clang -o crack crack.c && ./crack "50Bpa7n/23iug"
+ * Yields: 12345
+ */
 
 int checkPassword(char * password, char * hash)
 {   
-    // int modifier;
-    // char salt[3] = {32, 32};
-    // char * passwordHash;
+    int modifier;
+    char salt[3] = {32, 32};
+    char * passwordHash;
     
-    // // Generate all possible salts and test them with crypt
+    // Generate all possible salts and test them with crypt
 
-    // // This part actually might be neater as a recursive function too
-    // // This works for two levels of nesting, 
-    // // although I already have code duplication (not DRY)
-    // for (int i = 0; i < 64; i++)
-    // {
-    //     // i to ascii mapping for salt
-    //     if (i >= 38) {
-    //         modifier = 59;
-    //     } else if ( i >= 12) {
-    //         modifier = 53;
-    //     } else if ( i >= 0) {
-    //         modifier = 46;
-    //     }
-    //     salt[0] = modifier + i;
+    // This part actually might be neater as a recursive function too
+    // This works for two levels of nesting, 
+    // although I already have code duplication (not DRY)
+    for (int i = 0; i < 64; i++)
+    {
+        // i to ascii mapping for salt
+        if (i >= 38) {
+            modifier = 59;
+        } else if ( i >= 12) {
+            modifier = 53;
+        } else if ( i >= 0) {
+            modifier = 46;
+        }
+        salt[0] = modifier + i;
         
-    //     for (int j = 0; j < 64; j++)
-    //     {
-    //         // i to ascii mapping for salt
-    //         if (j >= 38) {
-    //             modifier = 59;
-    //         } else if ( j >= 12) {
-    //             modifier = 53;
-    //         } else if ( j >= 0) {
-    //             modifier = 46;
-    //         }
-    //         salt[1] = modifier + j;
+        for (int j = 0; j < 64; j++)
+        {
+            // i to ascii mapping for salt
+            if (j >= 38) {
+                modifier = 59;
+            } else if ( j >= 12) {
+                modifier = 53;
+            } else if ( j >= 0) {
+                modifier = 46;
+            }
+            salt[1] = modifier + j;
             
-    //         // Encrypt with the generated salt and test wether the hashes
-    //         // are equal.
-    //         passwordHash = crypt(password, salt);
-    //         if (!strcmp(hash, passwordHash))
-    //         {
-    //             return 0;
-    //         }
-    //     }
-    // }
+            // Encrypt with the generated salt and test wether the hashes
+            // are equal.
+            passwordHash = crypt(password, salt);
+            if (!strcmp(hash, passwordHash))
+            {
+                return 0;
+            }
+        }
+    }
 
     // This little thing already has the right salt (50) hardcoded, 
     // saves quite a bit of effort while testing
 
-    char * passwordHash = crypt(password, "50");
-    if (!strcmp(hash, passwordHash))
-    {
-        return 0;
-    }
+    // char * passwordHash = crypt(password, "50");
+    // if (!strcmp(hash, passwordHash))
+    // {
+    //     return 0;
+    // }
 
     return 1;
 }
@@ -69,11 +80,11 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
     A note to the wise:
 
     32 < 127 are the required chars, yet 48 < 54 (range [0-5]) were already 
-    quite the hassle for my dear ol' machine. The hash "50Bpa7n/23iug"
-    (password: 12345) takes 55 seconds to solve on my machine with the 
-    short range... With the full range however, and 8 characters as the 
-    assignment requires, it would take a bit longer with this code. 
-    My estimate yielded about 1.4 million years. 
+    quite the hassle for my dear ol' machine. Let alone the slow Cloud IDE
+    The hash "50Bpa7n/23iug" (password: 12345) takes 55 seconds to solve 
+    on my machine with the short range... With the full range however, 
+    and 8 characters as the assignment requires, it would take a bit longer 
+    with this code.
 
     Somehow, i think, that can be done faster.
     */
@@ -110,9 +121,6 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
 
 int main(int argc, char * argv[])
 {
-    // hardcoded test hash
-    // char * hash = "50Bpa7n/23iug"; // solves to 12345
-
     // getting the hash and erroring when needed
     if (argc == 1 || argc > 2){
         return 1;
