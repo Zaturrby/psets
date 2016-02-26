@@ -4,7 +4,6 @@
 #include <ctype.h>
 
 // initials.c is a program that asks for a name, and outputs the initials.
-
 int main(void)
 {
     string name = GetString();
@@ -22,7 +21,10 @@ int main(void)
         // Cornercase for i = 0
         } else if ( i == 0 ) 
         {
-            printf("%c", toupper(name[i])); 
+            if (isalpha(name[i])) 
+            {
+                printf("%c", toupper(name[i]));
+            }
         }
     }
     printf("\n");
