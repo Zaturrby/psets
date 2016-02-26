@@ -92,14 +92,9 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
     // loop over all the range of ascii characters 
     for (int m = 48; m < 54; m++) 
     {
-        // Change the letter in the current position
+        // Change the letter in the current position and set a terminator
         password[position] = m;
-
-        // Debug Feedback
-        if (position == 0)
-        {
-            printf("%.*s\n", length, password);
-        }
+        password[length+1] = 0;
 
         // Only check the lowest recursion to not "greatly perturb" doubles
         if (position == length - 1 && !checkPassword(password, hash))
