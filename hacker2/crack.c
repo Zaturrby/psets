@@ -8,57 +8,57 @@
 
 int checkPassword(char * password, char * hash)
 {   
-    int modifier;
-    char salt[3] = {32, 32};
-    char * passwordHash;
+    // int modifier;
+    // char salt[3] = {32, 32};
+    // char * passwordHash;
     
-    // Generate all possible salts and test them with crypt
+    // // Generate all possible salts and test them with crypt
 
-    // This part actually might be neater as a recursive function too
-    // This works for two levels of nesting, 
-    // although I already have code duplication (not DRY)
-    for (int i = 0; i < 64; i++)
-    {
-        // i to ascii mapping for salt
-        if (i >= 38) {
-            modifier = 59;
-        } else if ( i >= 12) {
-            modifier = 53;
-        } else if ( i >= 0) {
-            modifier = 46;
-        }
-        salt[0] = modifier + i;
+    // // This part actually might be neater as a recursive function too
+    // // This works for two levels of nesting, 
+    // // although I already have code duplication (not DRY)
+    // for (int i = 0; i < 64; i++)
+    // {
+    //     // i to ascii mapping for salt
+    //     if (i >= 38) {
+    //         modifier = 59;
+    //     } else if ( i >= 12) {
+    //         modifier = 53;
+    //     } else if ( i >= 0) {
+    //         modifier = 46;
+    //     }
+    //     salt[0] = modifier + i;
         
-        for (int j = 0; j < 64; j++)
-        {
-            // i to ascii mapping for salt
-            if (j >= 38) {
-                modifier = 59;
-            } else if ( j >= 12) {
-                modifier = 53;
-            } else if ( j >= 0) {
-                modifier = 46;
-            }
-            salt[1] = modifier + j;
+    //     for (int j = 0; j < 64; j++)
+    //     {
+    //         // i to ascii mapping for salt
+    //         if (j >= 38) {
+    //             modifier = 59;
+    //         } else if ( j >= 12) {
+    //             modifier = 53;
+    //         } else if ( j >= 0) {
+    //             modifier = 46;
+    //         }
+    //         salt[1] = modifier + j;
             
-            // Encrypt with the generated salt and test wether the hashes
-            // are equal.
-            passwordHash = crypt(password, salt);
-            if (!strcmp(hash, passwordHash))
-            {
-                return 0;
-            }
-        }
-    }
+    //         // Encrypt with the generated salt and test wether the hashes
+    //         // are equal.
+    //         passwordHash = crypt(password, salt);
+    //         if (!strcmp(hash, passwordHash))
+    //         {
+    //             return 0;
+    //         }
+    //     }
+    // }
 
     // This little thing already has the right salt (50) hardcoded, 
     // saves quite a bit of effort while testing
 
-    // char * passwordHash = crypt(password, "50");
-    // if (!strcmp(hash, passwordHash))
-    // {
-    //     return 0;
-    // }
+    char * passwordHash = crypt(password, "50");
+    if (!strcmp(hash, passwordHash))
+    {
+        return 0;
+    }
 
     return 1;
 }
@@ -79,7 +79,7 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
     */
     
     // loop over all the range of ascii characters 
-    for (int m = 32; m < 127; m++) 
+    for (int m = 48; m < 54; m++) 
     {
         // Change the letter in the current position
         password[position] = m;
