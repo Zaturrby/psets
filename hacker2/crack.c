@@ -1,7 +1,7 @@
 #include <stdio.h>
+#define _XOPEN_SOURCE
 #include <unistd.h>
 #include <string.h>
-#define _XOPEN_SOURCE
 // #include <crypt.h>
 
 // crack.c is a program that cracks fake old UNIX passwords
