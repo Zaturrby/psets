@@ -84,6 +84,12 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
         // Change the letter in the current position
         password[position] = m;
 
+        // Debug Feedback
+        if (position == 0)
+        {
+            printf("%.*s\n", length, password);
+        }
+
         // Only check the lowest recursion to not "greatly perturb" doubles
         if (position == length - 1 && !checkPassword(password, hash))
         {
