@@ -49,19 +49,19 @@ int checkPassword(char * password, char * hash)
     return 1;
 }
 
-char * recur(int position, int length, char password[8])
+char * recur(int position, int length, char password[20], char * hash)
 {
-    // Change the asciicode of the 
-    for (int m = 32; m < 36; m++) //127
+    for (int m = 32; m < 127; m++)
     {
         password[position] = m;
-        printf("\nposition: %i", position);
-        printf("\npassword: >%.*s<", length, password);
-        // printf("%i: >%.*s< ", m, length, password);
-        // The recursive part
+        if (position == length - 1 ) {
+            // printf("\nposition: %i", position);
+            printf("\npassword: >%.*s<", length, password);
+            checkPassword(password, hash);
+        }
         if (position < length - 1)
         { 
-            recur(position + 1, length, password);
+            recur(position + 1, length, password, hash);
         }
     }
     return "";
@@ -69,14 +69,17 @@ char * recur(int position, int length, char password[8])
 
 int main(void)
 {
-    // Initialize VLA to spaces (effective 0 in this case)
-    int length = 3;
+    // hashinput
+    char * hash = "50Bpa7n/23iug";
+    
+    // Initialize VLA to spaces (lowest possible password)
+    int length = 5;
     char initialPassword[length]; 
     for(int i = 0; i < length; i++)
     {
         initialPassword[i] = 32;
     }
     
-    char * password = recur(0, length, initialPassword);
+    char * password = recur(0, length, initialPassword, hash);
     printf("\n\n"); 
 }
