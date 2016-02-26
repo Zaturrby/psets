@@ -63,7 +63,7 @@ int checkPassword(char * password, char * hash)
     }
 
     // This little thing already has the right salt (50) hardcoded, 
-    // saves quite a bit of effort while testing
+    // saves quite a bit of effort while testing (for the testhash)
 
     // char * passwordHash = crypt(password, "50");
     // if (!strcmp(hash, passwordHash))
