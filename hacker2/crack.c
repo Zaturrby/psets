@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include <cs50.h>
+// #include <cs50.h>
+#include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 #define _XOPEN_SOURCE
 #include <unistd.h>
-#include <crypt.h>
+// #include <crypt.h>
 
 // crack.c is a program that crash fake old UNIX passwords
 
@@ -41,7 +42,6 @@ int checkPassword(char * password, char * hash)
             passwordHash = crypt(password, salt);
             if (!strcmp(hash, passwordHash))
             {
-                printf("equal");
                 return 0;
             }
         }
@@ -49,19 +49,24 @@ int checkPassword(char * password, char * hash)
     return 1;
 }
 
-char * recur(int position, int length, char password[20], char * hash)
+char * generatePasswordandCheck(int position, int length, char password[20], char * hash)
 {
-    for (int m = 32; m < 127; m++)
+    for (int m = 48; m < 58; m++) // 32 - 127
     {
         password[position] = m;
-        if (position == length - 1 ) {
-            // printf("\nposition: %i", position);
+        if (position == length - 3 )
+        {
             printf("\npassword: >%.*s<", length, password);
-            checkPassword(password, hash);
+        }
+        if (position == length - 1 ) {
+            if (!checkPassword(password, hash))
+            {
+                printf("\nfound password: >%.*s<", length, password);
+            };
         }
         if (position < length - 1)
         { 
-            recur(position + 1, length, password, hash);
+            generatePasswordandCheck(position + 1, length, password, hash);
         }
     }
     return "";
@@ -77,9 +82,9 @@ int main(void)
     char initialPassword[length]; 
     for(int i = 0; i < length; i++)
     {
-        initialPassword[i] = 32;
+        initialPassword[i] = 48;
     }
     
-    char * password = recur(0, length, initialPassword, hash);
+    char * password = generatePasswordandCheck(0, length, initialPassword, hash);
     printf("\n\n"); 
 }
