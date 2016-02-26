@@ -4,7 +4,7 @@
 #define _XOPEN_SOURCE
 // #include <crypt.h>
 
-// crack.c is a program that crash fake old UNIX passwords
+// crack.c is a program that cracks fake old UNIX passwords
 
 int checkPassword(char * password, char * hash)
 {   
@@ -12,10 +12,11 @@ int checkPassword(char * password, char * hash)
     char salt[3] = {32, 32};
     char * passwordHash;
     
-    
     // Generate all possible salts and test them with crypt
+
     // This part actually might be neater as a recursive function too
-    // This works for two, although I already have code duplication (not DRY)
+    // This works for two levels of nesting, 
+    // although I already have code duplication (not DRY)
     for (int i = 0; i < 64; i++)
     {
         // i to ascii mapping for salt
@@ -69,10 +70,10 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
 
     32 < 127 are the required chars, yet 48 < 54 (range [0-5]) were already 
     quite the hassle for my dear ol' machine. The hash "50Bpa7n/23iug"
-    (password: 12345) takes 55 seconds to solve on my machine with the short range... 
-    With the full range however, and 8 characters as the assignment 
-    requires, it would take a bit longer with this code. My estimate yielded 
-    about 1.4 million years. 
+    (password: 12345) takes 55 seconds to solve on my machine with the 
+    short range... With the full range however, and 8 characters as the 
+    assignment requires, it would take a bit longer with this code. 
+    My estimate yielded about 1.4 million years. 
 
     Somehow, i think, that can be done faster.
     */
