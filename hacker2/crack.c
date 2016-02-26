@@ -2,12 +2,12 @@
 #include <string.h>
 
 // Macbook Libraries
-#define _XOPEN_SOURCE
-#include <unistd.h>
+// #define _XOPEN_SOURCE
+// #include <unistd.h>
 
 // Cloud 9 Libraries 
-// #define _GNU_SOURCE
-// #include <crypt.h>
+#define _GNU_SOURCE
+#include <crypt.h>
 
 /*
  * crack.c is a program that cracks fake old UNIX passwords
@@ -31,11 +31,14 @@ int checkPassword(char * password, char * hash)
     for (int i = 0; i < 64; i++)
     {
         // i to ascii mapping for salt
-        if (i >= 38) {
+        if (i >= 38) 
+        {
             modifier = 59;
-        } else if ( i >= 12) {
+        } else if ( i >= 12) 
+        {
             modifier = 53;
-        } else if ( i >= 0) {
+        } else if ( i >= 0) 
+        {
             modifier = 46;
         }
         salt[0] = modifier + i;
@@ -43,11 +46,14 @@ int checkPassword(char * password, char * hash)
         for (int j = 0; j < 64; j++)
         {
             // i to ascii mapping for salt
-            if (j >= 38) {
+            if (j >= 38) 
+            {
                 modifier = 59;
-            } else if ( j >= 12) {
+            } else if ( j >= 12) 
+            {
                 modifier = 53;
-            } else if ( j >= 0) {
+            } else if ( j >= 0) 
+            {
                 modifier = 46;
             }
             salt[1] = modifier + j;
@@ -64,17 +70,23 @@ int checkPassword(char * password, char * hash)
 
     // This little thing already has the right salt (50) hardcoded, 
     // saves quite a bit of effort while testing (for the testhash)
-
-    // char * passwordHash = crypt(password, "50");
-    // if (!strcmp(hash, passwordHash))
-    // {
-    //     return 0;
-    // }
+    
+    /*
+    char * passwordHash = crypt(password, "50");
+    if (!strcmp(hash, passwordHash))
+    {
+        return 0;
+    }
+    */
 
     return 1;
 }
 
-int generatePasswordandCheck(int position, int length, char password[8], char * hash)
+int generatePasswordandCheck(
+    int position, 
+    int length, 
+    char password[8], 
+    char * hash)
 {
     /* 
     A note to the wise:
@@ -90,11 +102,11 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
     */
     
     // loop over all the range of ascii characters 
-    for (int m = 48; m < 54; m++) 
+    for (int i = 32; i < 127; i++) 
     {
         // Change the letter in the current position and set a terminator
-        password[position] = m;
-        password[length+1] = 0;
+        password[position] = i;
+        password[length + 1] = 0;
 
         // Only check the lowest recursion to not "greatly perturb" doubles
         if (position == length - 1 && !checkPassword(password, hash))
@@ -108,7 +120,7 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
             if (!generatePasswordandCheck(position + 1, length, password, hash))
             {
                 return 0;
-            };
+            }
         }
     }
     return 1;
@@ -117,7 +129,8 @@ int generatePasswordandCheck(int position, int length, char password[8], char * 
 int main(int argc, char * argv[])
 {
     // getting the hash and erroring when needed
-    if (argc == 1 || argc > 2){
+    if (argc == 1 || argc > 2)
+    {
         return 1;
     }
     char * hash = argv[1];
@@ -132,13 +145,19 @@ int main(int argc, char * argv[])
 
     while (passwordLength <= maxLength && found == 1)
     { 
-        found = generatePasswordandCheck(0, passwordLength, initialPassword, hash);
+        found = generatePasswordandCheck(
+            0, 
+            passwordLength, 
+            initialPassword, 
+            hash);
         passwordLength++;
     }
 
-    if (found == 0){
+    if (found == 0)
+    {
         return 0;
-    } else {
+    } else 
+    {
         return 1;
     }
 
