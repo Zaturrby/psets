@@ -28,10 +28,34 @@ bool search(int value, int array[], int n)
 }
 
 /**
- * Sorts array of n values.
+ * Sorts array of n values at O(n) 
  */
 void sort(int values[], int n)
 {
-    // TODO: implement an O(n) sorting algorithm
+    int valuesMulti[n][5];
+    // Radix sort
+    
+    // split the numbers
+    for (int i = 0; i < n; i++)
+    {
+        int j = 0;
+        printf("Value: %i\n", values[i]);
+
+        while (values[i] > 0){
+            valuesMulti[i][j] = values[i] % 10;
+            values[i] /= 10;
+            printf("valuesmulti %i\n", valuesMulti[i][j]);
+            j++; 
+        }
+        printf("\n");
+    }
+
+    // Dump them in buckets
+    // int buckets[9][n];
+    for (int i = 0; i < n; i++)
+    {
+    }
+
+
     return;
 }
