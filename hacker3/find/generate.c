@@ -24,7 +24,7 @@
 
 int main(int argc, string argv[])
 {
-    // print usage info if needed
+    // print usage info when needed
     if (argc != 2 && argc != 3)
     {
         printf("Usage: generate n [s]\n");
