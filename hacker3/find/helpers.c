@@ -31,7 +31,8 @@ bool linearSearch(int value, int array[], int n)
 /**
  * Returns true if value is in array of n values, else false.
  */
-int searchR(int value, int array[], int nmin, int nmax){
+int searchR(int value, int array[], int nmin, int nmax)
+{
     // check to go on
     if (nmax - nmin == 0)
     {
@@ -76,13 +77,14 @@ bool search(int value, int array[], int n)
  * and then followed up on that with counting sort O(n+65536), 
  * which has the least amount of operations from n = 19870.
  * And, not to forget, I should probably simplify/refactor 
- * just a tad more.
+ * just a tad more. Might be poss
  */
 
 void sort(int values[], int n)
 {
     // radix sort
-    for (int times = 0; times < 5; times++){
+    for (int times = 0; times < 5; times++)
+    {
         int buckets[10][n];
         int bucketsLength[10] = {0};
         
@@ -100,12 +102,14 @@ void sort(int values[], int n)
         int j = 0; 
         while (bucketCount < 10)
         {
-            if (bucketsLength[bucketCount] != 0){
+            if (bucketsLength[bucketCount] != 0)
+            {
                 values[i] = buckets[bucketCount][j];
                 i++;
                 j++;
             }
-            if (bucketsLength[bucketCount] <= j){
+            if (bucketsLength[bucketCount] <= j)
+            {
                 bucketCount++;
                 j = 0;
             }
