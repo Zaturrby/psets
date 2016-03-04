@@ -2,12 +2,12 @@
 #include <string.h>
 
 // Macbook Libraries
-// #define _XOPEN_SOURCE
-// #include <unistd.h>
+#define _XOPEN_SOURCE
+#include <unistd.h>
 
 // Cloud 9 Libraries 
-#define _GNU_SOURCE
-#include <crypt.h>
+// #define _GNU_SOURCE
+// #include <crypt.h>
 
 /*
  * crack.c is a program that cracks fake old UNIX passwords
@@ -133,25 +133,27 @@ int main(int argc, char * argv[])
     {
         return 1;
     }
-    char * hash = argv[1];
+    // char * hash = argv[1];
 
     // define maxlength for checking and initial password
-    int maxLength = 8;
-    char initialPassword[maxLength]; 
+    // int maxLength = 8;
+    // char initialPassword[maxLength]; 
     
     // loop over all possible lengths and quit when password is found
     int found = 1;
-    int passwordLength = 1;
+    // int passwordLength = 1;
 
-    while (passwordLength <= maxLength && found == 1)
-    { 
-        found = generatePasswordandCheck(
-            0, 
-            passwordLength, 
-            initialPassword, 
-            hash);
-        passwordLength++;
-    }
+    printf("something: %s", crypt("something", "11"));
+
+    // while (passwordLength <= maxLength && found == 1)
+    // { 
+        // found = generatePasswordandCheck(
+        //     0, 
+        //     passwordLength, 
+        //     initialPassword, 
+        //     hash);
+        // passwordLength++;
+    // }
 
     if (found == 0)
     {
