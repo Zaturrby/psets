@@ -65,35 +65,35 @@ int main(int argc, string argv[])
     init();
 
     // accept moves until game is won
-    while (true)
-    {
-        // clear the screen
-        clear();
+    // while (true)
+    // {
+    //     // clear the screen
+    //     clear();
 
-        // draw the current state of the board
-        draw();
+    //     // draw the current state of the board
+    //     draw();
 
-        // check for win
-        if (won())
-        {
-            printf("ftw!\n");
-            break;
-        }
+    //     // check for win
+    //     if (won())
+    //     {
+    //         printf("ftw!\n");
+    //         break;
+    //     }
 
-        // prompt for move
-        printf("Tile to move: ");
-        int tile = GetInt();
+    //     // prompt for move
+    //     printf("Tile to move: ");
+    //     int tile = GetInt();
 
-        // move if possible, else report illegality
-        if (!move(tile))
-        {
-            printf("\nIllegal move.\n");
-            usleep(500000);
-        }
+    //     // move if possible, else report illegality
+    //     if (!move(tile))
+    //     {
+    //         printf("\nIllegal move.\n");
+    //         usleep(500000);
+    //     }
 
-        // sleep thread for animation's sake
-        usleep(500000);
-    }
+    //     // sleep thread for animation's sake
+    //     usleep(500000);
+    // }
 
     // success
     return 0;
@@ -124,7 +124,38 @@ void greet(void)
  */
 void init(void)
 {
-    // TODO
+    int n = d * d- 1;
+    // get array of d*d size with random numbers
+    int blocks[n];
+    for (int i = 0; i < n; i++)
+    {
+        blocks[i] = i + 1;
+    }
+
+    // shuffle - Fisher-Yates modern version
+    // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+    srand48(50);
+    for (int i = n - 1; i > 0; i--)
+    {
+        int j = drand48() * i;
+        int temp = blocks[j];
+        blocks[j] = blocks[i];
+        blocks[i] = temp;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        printf("%i\n", blocks[i]);
+    }
+
+    // int blocks[d*d] = (drand48() * d*d) - length);
+    // for (int i=0; i < d; i++)
+    // {
+    //     for (int j=0; j < d; j++)
+    //     {
+
+    //     }
+    // }
 }
 
 /**
