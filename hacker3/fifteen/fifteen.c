@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 // constants
 #define DIM_MIN 3
@@ -65,35 +66,35 @@ int main(int argc, string argv[])
     init();
 
     // accept moves until game is won
-    // while (true)
-    // {
-    //     // clear the screen
-    //     clear();
+    while (true)
+    {
+        // clear the screen
+        clear();
 
-    //     // draw the current state of the board
-    //     draw();
+        // draw the current state of the board
+        draw();
 
-    //     // check for win
-    //     if (won())
-    //     {
-    //         printf("ftw!\n");
-    //         break;
-    //     }
+        // check for win
+        if (won())
+        {
+            printf("ftw!\n");
+            break;
+        }
 
-    //     // prompt for move
-    //     printf("Tile to move: ");
-    //     int tile = GetInt();
+        // prompt for move
+        printf("Tile to move: ");
+        int tile = GetInt();
 
-    //     // move if possible, else report illegality
-    //     if (!move(tile))
-    //     {
-    //         printf("\nIllegal move.\n");
-    //         usleep(500000);
-    //     }
+        // move if possible, else report illegality
+        if (!move(tile))
+        {
+            printf("\nIllegal move.\n");
+            usleep(500000);
+        }
 
-    //     // sleep thread for animation's sake
-    //     usleep(500000);
-    // }
+        // sleep thread for animation's sake
+        usleep(500000);
+    }
 
     // success
     return 0;
@@ -124,12 +125,12 @@ void greet(void)
  */
 void init(void)
 {
-    int n = d * d- 1;
-    // get array of d*d size with random numbers
+    int n = d * d;
+    // get array of d*d size with ordered numbers
     int blocks[n];
     for (int i = 0; i < n; i++)
     {
-        blocks[i] = i + 1;
+        blocks[i] = i;
     }
 
     // shuffle - Fisher-Yates modern version
@@ -143,19 +144,18 @@ void init(void)
         blocks[i] = temp;
     }
 
-    for (int i = 0; i < n; i++)
+    // make sure the board is solvable
+    // TODO
+
+    // Put them into a multidimensional array
+    int k = 0;
+    for (int i=0; i < d; i++)
     {
-        printf("%i\n", blocks[i]);
+        for (int j=0; j < d; j++, k++)
+        {
+            board[i][j] = blocks[k];
+        }
     }
-
-    // int blocks[d*d] = (drand48() * d*d) - length);
-    // for (int i=0; i < d; i++)
-    // {
-    //     for (int j=0; j < d; j++)
-    //     {
-
-    //     }
-    // }
 }
 
 /**
@@ -163,7 +163,18 @@ void init(void)
  */
 void draw(void)
 {
-    // TODO
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++)
+        {
+            if (board[i][j] < 10)
+            {
+                printf(" ");
+            }
+            printf("%i   ", board[i][j]);
+        }
+        printf("\n\n");
+    }
 }
 
 /**
@@ -172,7 +183,33 @@ void draw(void)
  */
 bool move(int tile)
 {
-    // TODO
+    // find coordinates:
+    int zpos[2] = {d, d};
+    int tpos[2] = {d, d};
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++)
+        {
+            if (board[i][j] == 0){
+                zpos[0] = i;
+                zpos[1] = j;
+            }
+            if (board[i][j] == tile){
+                tpos[0] = i;
+                tpos[1] = j;
+            }
+        }
+    }
+
+    // Swap if distance is 1
+    // Illegal moves impossible: initial positions are larger than the board
+    int distance = ceil(sqrt(pow((zpos[0] - tpos[0]), 2) + pow((zpos[1] - tpos[1]), 2)));
+    if (distance == 1){
+        board[zpos[0]][zpos[1]] = board[tpos[0]][tpos[1]];
+        board[tpos[0]][tpos[1]] = 0;
+        return true;
+    } 
+
     return false;
 }
 
@@ -182,6 +219,24 @@ bool move(int tile)
  */
 bool won(void)
 {
-    // TODO
-    return false;
+    // Covert to single dimension
+    int blocks[d*d];
+    int k = 0; 
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++, k++)
+        {
+            blocks[k] = board[i][j];
+        }
+    }
+
+    // Check
+    for (int i=0; i < d*d - 1; i++){
+        if (!(blocks[i] + 1 == blocks[i+1]))
+        {   
+            return false;
+        }
+    }
+
+    return true;
 }
