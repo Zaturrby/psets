@@ -29,7 +29,7 @@ bool linearSearch(int value, int array[], int n)
 }
 
 /**
- * Returns true if value is in array of n values, else false.
+ * Recursive binary search
  */
 int searchR(int value, int array[], int nmin, int nmax)
 {
