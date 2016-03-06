@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 // constants
 #define DIM_MIN 3
@@ -41,6 +42,7 @@ void clear(void);
 void greet(void);
 void init(void);
 void draw(void);
+void godmode(void);
 bool move(int tile);
 bool won(void);
 
@@ -123,11 +125,7 @@ void greet(void)
 }
 
 /**
- * Algorithm to sort ánd to count inversions to the global scope
- * 
- * Global scope is a quick fix to avoid having to use somekind of
- * struct as output of the function, which holds the array and 
- * the inversion count
+ * Algorithm to merge sort ánd to count inversions to the global scope
  */
 int * countInversions(int arr[], int n){
     if (n > 1) 
@@ -216,7 +214,7 @@ void init(void)
 
     // shuffle - Fisher-Yates modern version
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-    srand48(50);
+    srand48((long int) time(NULL));
     for (int i = n - 1; i > 0; i--)
     {
         int j = drand48() * i;
@@ -247,6 +245,7 @@ void init(void)
     inv -= zeropos;
 
     // Check if the board is solvable and fix it if need be
+    // This condition is clearly described above
     if (!(((d % 2 != 0) && (inv % 2 == 0)) || 
         ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 == 0) && (inv % 2 != 0)) ||
         ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 != 0) && (inv % 2 == 0)) 
@@ -355,4 +354,13 @@ bool won(void)
     }
 
     return true;
+}
+
+/**
+ * Godmode for the game, where the player can sitback and watch
+ * the puzzle get solved.
+ */
+void godmode(void)
+{
+
 }
