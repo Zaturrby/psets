@@ -49,7 +49,7 @@ void godmode(void);
 bool move(int tile);
 bool won(void);
 void randomSolution();
-int * searchSolution(int boardcopy[d][d], int depth);
+bool searchSolution(int boardcopy[], int depth);
 
 int main(int argc, string argv[])
 {
@@ -372,27 +372,40 @@ bool won(void)
  */
 void godmode(void)
 {
-    searchSolution(board, 1);
+    // Covert to single dimension
+    int blocks[d*d];
+    int k = 0; 
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++, k++)
+        {
+            blocks[k] = board[i][j];
+        }
+    }
+
+    searchSolution(blocks, 1);
 }
 
 
 
-int * searchSolution(int boardcopy[d][d], int depth)
+bool searchSolution(int blocks[], int depth)
 {
+    // Put the array to a boardcopy
+    int boardcopy[d][d];
+    int k = 0;
     int zpos[2] = {d, d};
-    int boardnewcopy[d][d];
-    for (int i=0; i < d; i++)
+    for (int i = 0; i < d; i++)
     {
-        for (int j=0; j < d; j++)
+        for (int j = 0; j < d; j++, k++)
         {
             if (boardcopy[i][j] == 0){
                 zpos[0] = i;
                 zpos[1] = j;
             }
-            boardnewcopy[d][d] = boardcopy[i][j];
-            printf("item: %i\n", boardcopy[i][j]);
+            boardcopy[i][j] = blocks[k];
         }
     }
+
     return 0;
 }
 
