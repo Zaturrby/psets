@@ -37,6 +37,9 @@ int d;
 // inversions
 int inv;
 
+// moves
+int moves;
+
 // prototypes
 void clear(void);
 void greet(void);
@@ -45,6 +48,8 @@ void draw(void);
 void godmode(void);
 bool move(int tile);
 bool won(void);
+void randomSolution();
+int * searchSolution(int boardcopy[d][d], int depth);
 
 int main(int argc, string argv[])
 {
@@ -70,6 +75,7 @@ int main(int argc, string argv[])
     // initialize the board
     init();
 
+    moves = 0;
     // accept moves until game is won
     while (true)
     {
@@ -86,19 +92,21 @@ int main(int argc, string argv[])
             break;
         }
 
-        // prompt for move
-        printf("Tile to move: ");
-        int tile = GetInt();
+        // // prompt for move
+        // printf("Tile to move: ");
+        // int tile = GetInt();
 
-        // move if possible, else report illegality
-        if (!move(tile))
-        {
-            printf("\nIllegal move.\n");
-            usleep(500000);
-        }
+        // // move if possible, else report illegality
+        // if (!move(tile))
+        // {
+        //     printf("\nIllegal move.\n");
+        //     usleep(500000);
+        // }
+
+        godmode();
 
         // sleep thread for animation's sake
-        usleep(500000);
+        // usleep(500000);
     }
 
     // success
@@ -224,7 +232,7 @@ void init(void)
     }
     
     // tests
-    // int blocks[16] = {1, 12, 10, 2, 7, 11, 4, 14, 5, 0, 9, 15, 8, 13, 6, 3}; // 49 inv
+    // int blocks[16] = {12, 1, 10, 2, 7, 11, 4, 14, 5, 0, 9, 15, 8, 13, 6, 3}; // 49 inv
     // int blocks[16] = {13, 10, 11, 6, 5, 7, 4, 8, 1, 12, 14, 9, 3, 15, 2, 0 }; // 59 inv
     
     // Copy the array and find the 0;
@@ -359,8 +367,75 @@ bool won(void)
 /**
  * Godmode for the game, where the player can sitback and watch
  * the puzzle get solved.
+ * 
+ * The A* algoritm is for finding the optimal path. 
  */
 void godmode(void)
 {
+    searchSolution(board, 1);
+}
 
+
+
+int * searchSolution(int boardcopy[d][d], int depth)
+{
+    int zpos[2] = {d, d};
+    int boardnewcopy[d][d];
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++)
+        {
+            if (boardcopy[i][j] == 0){
+                zpos[0] = i;
+                zpos[1] = j;
+            }
+            boardnewcopy[d][d] = boardcopy[i][j];
+            printf("item: %i\n", boardcopy[i][j]);
+        }
+    }
+    return 0;
+}
+
+void randomSolution(){
+    // find coordinates of zero
+    int zpos[2] = {d, d};
+    for (int i=0; i < d; i++)
+    {
+        for (int j=0; j < d; j++)
+        {
+            if (board[i][j] == 0){
+                zpos[0] = i;
+                zpos[1] = j;
+            }
+        }
+    }
+
+    // Randomly chose moves
+    srand48((long int) time(NULL));
+    int randHorV = drand48() * 2;
+    int randBorA = drand48() * 2;
+    if (randHorV)
+    {
+        // y-axis moves
+        if (randBorA && zpos[0] < d - 1){
+            board[zpos[0]][zpos[1]] = board[zpos[0]+1][zpos[1]];
+            board[zpos[0]+1][zpos[1]] = 0;
+            moves++;
+        } else if (zpos[0] > 0) {
+            board[zpos[0]][zpos[1]] = board[zpos[0]-1][zpos[1]];
+            board[zpos[0]-1][zpos[1]] = 0;
+            moves++;
+        }
+    } else {
+        if (randBorA && zpos[1] < d - 1){
+            board[zpos[0]][zpos[1]] = board[zpos[0]][zpos[1]+1];
+            board[zpos[0]][zpos[1]+1] = 0;
+            moves++;
+        } else if (zpos[1] > 0) {
+            board[zpos[0]][zpos[1]] = board[zpos[0]][zpos[1]-1];
+            board[zpos[0]][zpos[1]-1] = 0;
+            moves++;
+        }
+    }
+    printf("moves %i \n", moves);
 }
