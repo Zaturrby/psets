@@ -239,7 +239,8 @@ void init(void)
     //     blocks[i] = temp;
     // }
     
-    int blocks[16] = {12, 1, 10, 2, 7, 11, 4, 14, 5, 16, 9, 15, 8, 13, 6, 3};
+    // int blocks[16] = {12, 1, 10, 2, 7, 11, 4, 14, 5, 16, 9, 15, 8, 13, 6, 3};
+    int blocks[16] = {13, 10, 11, 6, 5, 7, 4, 8, 1, 12, 14, 9, 3, 15, 2};
 
     /** 
      * make sure the board is solvable by counting inversions
