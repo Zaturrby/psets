@@ -130,61 +130,40 @@ void greet(void)
  * the inversion count
  */
 int * countInversions(int arr[], int n){
-    printf("-> in %i\n", n);
     if (n > 1) 
     {   
         // enter recursion
         int leftArr[n/2];
-        int rightArr[(int)ceil(n/2)];
+        int rightArr[(int)ceil(((float)n)/2)];
         for (int i = 0; i < n; i++)
         {
-            // printf("%i - loop\n", n);
-            if (i < (int)(n/2))
+            if (i < n/2)
             {
                 leftArr[i] = arr[i];
             } else {
-                rightArr[(int)ceil(i-n/2)] = arr[i];
+                rightArr[(int)ceil(i-((float)n/2))] = arr[i];
             }
         }
         countInversions(leftArr, n/2);
-        countInversions(rightArr, ceil(n/2));
+        countInversions(rightArr, (int)ceil(((float)n)/2));
     
-        // printf("pass!!\n\n\n");
-        
-        printf("**********left\n");
-        for (int i = 0; i < n/2; i++)
-        {
-            printf("item: %i\n", leftArr[i]);
-        }
-
-        printf("**********right\n");
-        
-        for (int i = 0; i < ceil(n/2); i++)
-        {
-            printf("item: %i\n", rightArr[i]);
-        }
-        printf("**********end\n");
-
         // merge
-        // printf("------merging------- %i\n", n/2);
         int left = 0;
         int right = 0;
         for (int i = 0; i < n; i++)
         {
-            if (left < n/2 && right < ceil(n/2))
+            if (left < n/2 && right < (int)ceil(((float)n)/2))
             {
                 if (leftArr[left] > rightArr[right])
                 {
-                    // printf("**i=%i** rightvalue ->%i<- right %i \n", i, rightArr[right], right);
                     arr[i] = rightArr[right];
                     right++;
                 } else {
-                    // printf("**i=%i** leftvalue ->%i<- left %i \n", i, leftArr[left], left);
                     arr[i] = leftArr[left];
                     left++;
                     inv += right;
                 }
-            } else if (right < ceil(n/2)) 
+            } else if (right < (int)ceil(((float)n)/2)) 
             {
                 arr[i] = rightArr[right];
                 right++;
@@ -194,80 +173,95 @@ int * countInversions(int arr[], int n){
                 left++;
                 inv += right;
             }
-
         }
-        printf("&&&&&&&& invcount: %i &&&&&&&&&&&&\n", inv);
-
-        // printf("------done-------\n");
-
     }
-
-    // printf("---------------------\n");
-    // for (int i = 0; i < n; i++)
-    // {
-    //     printf("item: %i\n", arr[i]);
-    // }
-    // printf("---------------------\n");
-
-
-    printf(" <- out %i\n", n);
     return arr;
 }
 
 /**
  * Initializes the game's board with tiles numbered 1 through d*d - 1
  * (i.e., fills 2D array with values but does not actually print them).  
+ *  
+ * The init follow the following steps:
+ * 1. The init first generates an array of 0-15.
+ * 2. Shuffle the array to a pseudorandom state seeded with the time
+ * 3. Count inverions and substract the inversions of the zero pos
+ * 4. Check if the board is solvable and adjust if needed **
+ * 5. Put the array to the multidimensional array of the board
+ *
+ * ** To make sure the board is solvable by counting inversions
+ * the following formula is applied:
+ *
+ * a. If the grid width is odd, then the number of inversions in a solvable 
+ * situation is even.
+ * b. If the grid width is even, and the blank is on an even row counting 
+ * from the bottom (second-last, fourth-last etc), then the number of inversions 
+ * in a solvable situation is odd.
+ * c. If the grid width is even, and the blank is on an odd row counting from 
+ * the bottom (last, third-last, fifth-last etc) then the number of inversions 
+ * in a solvable situation is even.
+ * 
+ * Credits:
+ * https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
  */
 void init(void)
 {
-    // int n = d * d;
     // get array of d*d size with ordered numbers
-    // int blocks[n];
-    // for (int i = 0; i < n; i++)
-    // {
-    //     blocks[i] = i;
-    // }
+    int n = d * d;
+    int blocks[n];
+    for (int i = 0; i < n; i++)
+    {
+        blocks[i] = i;
+    }
 
     // shuffle - Fisher-Yates modern version
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-    // srand48(50);
-    // for (int i = n - 1; i > 0; i--)
-    // {
-    //     int j = drand48() * i;
-    //     int temp = blocks[j];
-    //     blocks[j] = blocks[i];
-    //     blocks[i] = temp;
-    // }
+    srand48(50);
+    for (int i = n - 1; i > 0; i--)
+    {
+        int j = drand48() * i;
+        int temp = blocks[j];
+        blocks[j] = blocks[i];
+        blocks[i] = temp;
+    }
     
-    // int blocks[16] = {12, 1, 10, 2, 7, 11, 4, 14, 5, 16, 9, 15, 8, 13, 6, 3};
-    int blocks[16] = {13, 10, 11, 6, 5, 7, 4, 8, 1, 12, 14, 9, 3, 15, 2};
+    // tests
+    // int blocks[16] = {1, 12, 10, 2, 7, 11, 4, 14, 5, 0, 9, 15, 8, 13, 6, 3}; // 49 inv
+    // int blocks[16] = {13, 10, 11, 6, 5, 7, 4, 8, 1, 12, 14, 9, 3, 15, 2, 0 }; // 59 inv
+    
+    // Copy the array and find the 0;
+    int blockscopy[n];
+    int zeropos;
+    for (int i = 0; i < n; i++)
+    {
+        blockscopy[i] = blocks[i];
+        if (blocks[i] == 0){
+            zeropos = i;
+        } 
+    }
 
-    /** 
-     * make sure the board is solvable by counting inversions
-     * and applying the following formula:
-     *
-     * a. If the grid width is odd, then the number of inversions in a solvable 
-     * situation is even.
-     * b. If the grid width is even, and the blank is on an even row counting 
-     * from the bottom (second-last, fourth-last etc), then the number of inversions 
-     * in a solvable situation is odd.
-     * c. If the grid width is even, and the blank is on an odd row counting from 
-     * the bottom (last, third-last, fifth-last etc) then the number of inversions 
-     * in a solvable situation is even.
-     * 
-     * Credits:
-     * https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-     */
-
-    // int * sortedArray = countInversions(blocks, d*d);
+    // Count the inversions in a global variable (inv) 
+    // and subtract the inversions caused by the 0
     inv = 0;
-    countInversions(blocks, d*d);
+    countInversions(blockscopy, d*d);
+    inv -= zeropos;
 
-    // for (int i = 0; i < n; i++) {
-    printf("sorted with %i inversions\n\n", inv);
-        // printf("sorted: %i \n", sortedArray);
-    // }
-    usleep(5000000);
+    // Check if the board is solvable and fix it if need be
+    if (!(((d % 2 != 0) && (inv % 2 == 0)) || 
+        ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 == 0) && (inv % 2 != 0)) ||
+        ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 != 0) && (inv % 2 == 0)) 
+        ))
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if ((blocks[i] > blocks[i+1]) && (blocks[i] != 0 && blocks[i+1] != 0)){
+                int temp = blocks[i];
+                blocks[i] = blocks[i + 1];
+                blocks[i + 1] = temp;
+                break;
+            }
+        }
+    } 
 
     // Put blocks to the board (multidimensional array)
     int k = 0;
