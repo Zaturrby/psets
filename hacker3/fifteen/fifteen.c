@@ -76,41 +76,42 @@ int main(int argc, string argv[])
     init();
 
     moves = 0;
-    printf("-------initial------\n");
-    draw();
-    printf("-------initial------\n");
-    godmode();
+
+    // Activate godmode
+    // There still is some plumbing to be done (getInt() to get getString())
+    // draw();
+    // godmode();
 
     // accept moves until game is won
-    // while (true)
-    // {
-    //     // clear the screen
-    //     clear();
+    while (true)
+    {
+        // clear the screen
+        clear();
 
-    //     // draw the current state of the board
-    //     draw();
+        // draw the current state of the board
+        draw();
 
-    //     // check for win
-    //     if (won())
-    //     {
-    //         printf("ftw!\n");
-    //         break;
-    //     }
+        // check for win
+        if (won())
+        {
+            printf("ftw!\n");
+            break;
+        }
 
-    //     // // prompt for move
-    //     printf("Tile to move: ");
-    //     int tile = GetInt();
+        // // prompt for move
+        printf("Tile to move: ");
+        int tile = GetInt();
 
-    //     // // move if possible, else report illegality
-    //     if (!move(tile))
-    //     {
-    //         printf("\nIllegal move.\n");
-    //         usleep(500000);
-    //     }
+        // // move if possible, else report illegality
+        if (!move(tile))
+        {
+            printf("\nIllegal move.\n");
+            usleep(500000);
+        }
 
-    //     // sleep thread for animation's sake
-    //     usleep(500000);
-    // }
+        // sleep thread for animation's sake
+        usleep(500000);
+    }
 
     // success
     return 0;
@@ -368,8 +369,6 @@ bool won(void)
 /**
  * Godmode for the game, where the player can sitback and watch
  * the puzzle get solved.
- * 
- * The A* algoritm is for finding the optimal path. 
  */
 void godmode(void)
 {
@@ -384,21 +383,41 @@ void godmode(void)
         }
     }
 
+    // Start searching for the solution with a given depth in mind
     for (int i=1; i < 30; i++){
         printf("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
         searchSolution(blocks, i, 10);
         printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
-
     }
-
 }
 
-
-
-
-// This algorithm is getting nooooowhere! 7 miljard en nog steeds niks.
+/**
+ * Recursively search for a solution.
+ *
+ * Currently not finished. There are quite a bit of debugging
+ * statements in.
+ *
+ * TODO:
+ * 1. Find where the terrible extra zero comes from
+ * 2. Check if recursion finds a possible solution
+ * 3. Optimize. 
+ * 3.1. Find some way to sustain the tree while changing depth 
+ * 3.2. Find some way to prioritize. (Priority queues??)
+ *
+ * Currently the functions follows these steps:
+ * 1. Do not backtrack
+ * 2. Create a copy of the board
+ * 3. Move the block
+ * 4. Go back to a array of single dimension
+ * 5. Check wether victory has been achieved (currently not very DRY)
+ * 6. Enter the recursion
+ * 
+ */
 bool searchSolution(int blocks[], int depth, int pdirection)
 {
+    // Somewhere extra zeroes appear in the game...
+    // Where-o-where do they come from?
+    // Some debugging:
     int zerotest = 0;
     for (int i = 0; i < d*d; i++){
         if (blocks[i] == 0)
@@ -410,9 +429,11 @@ bool searchSolution(int blocks[], int depth, int pdirection)
         printf("*********More than one zero***********\n");
         usleep(2000000);
     }
+
     // Check to stop the recursion
     if (depth > 0){
-        // No immediate backtracking
+        // No backtracking of the last move, quite pointless to explore those
+        // recursions
         if (pdirection < 2)
         {
             pdirection += 2;
@@ -523,55 +544,4 @@ bool searchSolution(int blocks[], int depth, int pdirection)
         }
     }   
     return 0;
-}
-
-
-
-
-
-
-
-void randomSolution(){
-    // find coordinates of zero
-    int zpos[2] = {d, d};
-    for (int i=0; i < d; i++)
-    {
-        for (int j=0; j < d; j++)
-        {
-            if (board[i][j] == 0){
-                zpos[0] = i;
-                zpos[1] = j;
-            }
-        }
-    }
-
-    // Randomly chose moves
-    srand48((long int) time(NULL));
-    int randHorV = drand48() * 2;
-    int randBorA = drand48() * 2;
-    if (randHorV)
-    {
-        // y-axis moves
-        if (randBorA && zpos[0] < d - 1){
-            board[zpos[0]][zpos[1]] = board[zpos[0]+1][zpos[1]];
-            board[zpos[0]+1][zpos[1]] = 0;
-            moves++;
-        } else if (zpos[0] > 0) {
-            board[zpos[0]][zpos[1]] = board[zpos[0]-1][zpos[1]];
-            board[zpos[0]-1][zpos[1]] = 0;
-            moves++;
-        }
-    } else {
-        // x-axis moves
-        if (randBorA && zpos[1] < d - 1){
-            board[zpos[0]][zpos[1]] = board[zpos[0]][zpos[1]+1];
-            board[zpos[0]][zpos[1]+1] = 0;
-            moves++;
-        } else if (zpos[1] > 0) {
-            board[zpos[0]][zpos[1]] = board[zpos[0]][zpos[1]-1];
-            board[zpos[0]][zpos[1]-1] = 0;
-            moves++;
-        }
-    }
-    printf("moves %i \n", moves);
 }
