@@ -208,8 +208,8 @@ int * countInversions(int arr[], int n)
  * a. If the grid width is odd, then the number of inversions in a solvable 
  * situation is even.
  * b. If the grid width is even, and the blank is on an even row counting 
- * from the bottom (second-last, fourth-last etc), then the number of inversions 
- * in a solvable situation is odd.
+ * from the bottom (second-last, fourth-last etc), then the number of 
+ * inversions in a solvable situation is odd.
  * c. If the grid width is even, and the blank is on an odd row counting from 
  * the bottom (last, third-last, fifth-last etc) then the number of inversions 
  * in a solvable situation is even.
@@ -267,7 +267,8 @@ void init(void)
         // Introducing a new one to change the parity is probably cleaner
         for (int i = 0; i < n; i++)
         {
-            if ((blocks[i] > blocks[i + 1]) && (blocks[i] != 0 && blocks[i + 1] != 0))
+            if ((blocks[i] > blocks[i + 1]) && 
+                (blocks[i] != 0 && blocks[i + 1] != 0))
             {
                 int temp = blocks[i];
                 blocks[i] = blocks[i + 1];
