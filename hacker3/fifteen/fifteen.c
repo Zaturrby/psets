@@ -196,7 +196,7 @@ int * countInversions(int arr[], int n)
  * (i.e., fills 2D array with values but does not actually print them).  
  *  
  * The init follow the following steps:
- * 1. The init first generates an array of 0-15.
+ * 1. The init first generates an array of 0 to n-1.
  * 2. Shuffle the array to a pseudorandom state seeded with the time
  * 3. Count inverions and substract the inversions caused by the zero
  * 4. Check if the board is solvable and adjust if needed **
