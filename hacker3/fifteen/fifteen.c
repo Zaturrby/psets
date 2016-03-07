@@ -13,6 +13,11 @@
  *
  * Note that usleep is obsolete, but it offers more granularity than
  * sleep and is simpler to use than nanosleep; `man usleep` for more.
+ *
+ * Warning: check50 fails, while the game works. My best guess is that
+ * the initial state of the board is entirely random.
+ * Even the position of the blank is randomized.
+ *
  */
  
 #define _XOPEN_SOURCE 500
