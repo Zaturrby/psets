@@ -151,7 +151,8 @@ int * countInversions(int arr[], int n)
             if (i < n / 2)
             {
                 leftArr[i] = arr[i];
-            } else {
+            } else 
+            {
                 rightArr[(int) ceil(i - ((float) n / 2))] = arr[i];
             }
         }
@@ -169,7 +170,8 @@ int * countInversions(int arr[], int n)
                 {
                     arr[i] = rightArr[right];
                     right++;
-                } else {
+                } else 
+                {
                     arr[i] = leftArr[left];
                     left++;
                     inv += right;
