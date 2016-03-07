@@ -450,7 +450,8 @@ bool searchSolution(int blocks[], int depth, int pdirection)
         if (pdirection < 2)
         {
             pdirection += 2;
-        } else {
+        } else 
+        {
             pdirection -= 2;
         }
 
@@ -470,7 +471,8 @@ bool searchSolution(int blocks[], int depth, int pdirection)
             {
                 for (int j = 0; j < d; j++, k++)
                 {
-                    if (boardcopy[i][j] == 0){
+                    if (boardcopy[i][j] == 0)
+                    {
                         zpos[0] = i;
                         zpos[1] = j;
                     }
@@ -491,12 +493,12 @@ bool searchSolution(int blocks[], int depth, int pdirection)
             }
             if (direction == 2 && zpos[1] < d - 1)
             {
-                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]+1];
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1] + 1];
                 boardcopy[zpos[0]][zpos[1] + 1] = 0;
             }
             if (direction == 3 && zpos[1] > 0) 
             {
-                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]-1];
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1] - 1];
                 boardcopy[zpos[0]][zpos[1] - 1] = 0;
             }
 
