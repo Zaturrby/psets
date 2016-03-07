@@ -174,7 +174,7 @@ int * countInversions(int arr[], int n)
                     left++;
                     inv += right;
                 }
-            } else if (right < (int)ceil(((float)n) / 2)) 
+            } else if (right < (int) ceil(((float) n ) / 2)) 
             {
                 arr[i] = rightArr[right];
                 right++;
@@ -256,15 +256,15 @@ void init(void)
     // Check if the board is solvable and fix it if need be
     // This 3-part condition is clearly described above
     if (!(((d % 2 != 0) && (inv % 2 == 0)) || 
-        ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 == 0) && (inv % 2 != 0)) ||
-        ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 != 0) && (inv % 2 == 0)) 
+        ((d % 2 == 0) && ((d - ((zeropos / d))) % 2 == 0) && (inv % 2 != 0)) ||
+        ((d % 2 == 0) && ((d - ((zeropos / d))) % 2 != 0) && (inv % 2 == 0)) 
         ))
     {
         // Swaps the first inversion
         // Introducing a new one to change the parity is probably cleaner
         for (int i = 0; i < n; i++)
         {
-            if ((blocks[i] > blocks[i+1]) && (blocks[i] != 0 && blocks[i+1] != 0)){
+            if ((blocks[i] > blocks[i + 1]) && (blocks[i] != 0 && blocks[i + 1] != 0)){
                 int temp = blocks[i];
                 blocks[i] = blocks[i + 1];
                 blocks[i + 1] = temp;
@@ -357,8 +357,8 @@ bool won(void)
     }
 
     // Check
-    for (int i=0; i < d*d - 1; i++){
-        if (!(blocks[i] + 1 == blocks[i+1]))
+    for (int i = 0; i < d*d - 1; i++){
+        if (!(blocks[i] + 1 == blocks[i + 1]))
         {   
             return false;
         }
@@ -374,7 +374,7 @@ bool won(void)
 void godmode(void)
 {
     // Covert to single dimension
-    int blocks[d*d];
+    int blocks[d * d];
     int k = 0; 
     for (int i=0; i < d; i++)
     {
@@ -385,7 +385,7 @@ void godmode(void)
     }
 
     // Start searching for the solution with a given depth in mind
-    for (int i=1; i < 30; i++){
+    for (int i = 1; i < 30; i++){
         printf("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
         searchSolution(blocks, i, 10);
         printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
@@ -420,7 +420,7 @@ bool searchSolution(int blocks[], int depth, int pdirection)
     // Where-o-where do they come from?
     // Some debugging:
     int zerotest = 0;
-    for (int i = 0; i < d*d; i++){
+    for (int i = 0; i < d * d; i++){
         if (blocks[i] == 0)
         {
             zerotest++;
@@ -467,20 +467,20 @@ bool searchSolution(int blocks[], int depth, int pdirection)
 
             // Moves: one for each direction
             if (direction == 0 && zpos[0] < d - 1){
-                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]+1][zpos[1]];
-                boardcopy[zpos[0]+1][zpos[1]] = 0;
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0] + 1][zpos[1]];
+                boardcopy[zpos[0] + 1][zpos[1]] = 0;
             }
             if (direction == 1 && zpos[0] > 0) {
-                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]-1][zpos[1]];
-                boardcopy[zpos[0]-1][zpos[1]] = 0;
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0] - 1][zpos[1]];
+                boardcopy[zpos[0] - 1][zpos[1]] = 0;
             }
             if (direction == 2 && zpos[1] < d - 1){
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]+1];
-                boardcopy[zpos[0]][zpos[1]+1] = 0;
+                boardcopy[zpos[0]][zpos[1] + 1] = 0;
             }
             if (direction == 3 && zpos[1] > 0) {
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]-1];
-                boardcopy[zpos[0]][zpos[1]-1] = 0;
+                boardcopy[zpos[0]][zpos[1] - 1] = 0;
             }
 
             // All of this is only interesting if the direction allows a move
@@ -509,9 +509,9 @@ bool searchSolution(int blocks[], int depth, int pdirection)
 
                 // Print copy
                 printf("Depth: %i, Direction: %i\n", depth, direction);
-                for (int i=0; i < d; i++)
+                for (int i = 0; i < d; i++)
                 {
-                    for (int j=0; j < d; j++)
+                    for (int j = 0; j < d; j++)
                     {
                         if (boardcopy[i][j] < 10)
                         {
@@ -524,7 +524,7 @@ bool searchSolution(int blocks[], int depth, int pdirection)
 
                 // Check won
                 int win = 1;
-                for (int i=0; i < d*d - 1; i++){
+                for (int i = 0; i < d * d - 1; i++){
                     if (!(blockscopy[i] + 1 == blockscopy[i+1]))
                     {   
                         win = 0;
