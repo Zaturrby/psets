@@ -402,10 +402,10 @@ void godmode(void)
  *
  * TODO:
  * 1. Find where the terrible extra zero comes from
- * 2. Check if recursion finds a possible solution
- * 3. Optimize. 
- * 3.1. Find some way to sustain the tree while changing depth 
- * 3.2. Find some way to prioritize. (Priority queues??)
+ * 2. Check if recursion finds a possible solution (probably not)
+ * 3. Implement a breadth first algorithm with a queue
+ * (move away from this terrible depth first recursive approach)
+ * 4. Implement a priority queue based on manhattan distance
  *
  * Currently the functions follows these steps:
  * 1. Do not backtrack
