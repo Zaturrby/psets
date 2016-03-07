@@ -546,13 +546,14 @@ bool searchSolution(int blocks[], int depth, int pdirection)
                 int win = 1;
                 for (int i = 0; i < d * d - 1; i++)
                 {
-                    if (!(blockscopy[i] + 1 == blockscopy[i+1]))
+                    if (!(blockscopy[i] + 1 == blockscopy[i + 1]))
                     {   
                         win = 0;
                     }
                 }
 
-                if (win == 1){
+                if (win == 1)
+                {
                     printf("\n***********************\n---WON---\n**********************\n");
                     usleep(2000000);
                 }
