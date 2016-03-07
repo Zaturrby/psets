@@ -91,7 +91,7 @@ void sort(int values[], int n)
         // into the buckets
         for (int i = 0; i < n; i++)
         {
-            int currentBucket = ((int)(values[i] / (1 * pow(10, times))) % 10);
+            int currentBucket = ((int) (values[i] / (1 * pow(10, times))) % 10);
             buckets[currentBucket][bucketsLength[currentBucket]] = values[i];
             bucketsLength[currentBucket]++;
         }
