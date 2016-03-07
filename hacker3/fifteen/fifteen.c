@@ -49,7 +49,7 @@ void godmode(void);
 bool move(int tile);
 bool won(void);
 void randomSolution();
-bool searchSolution(int boardcopy[], int depth);
+bool searchSolution(int boardcopy[], int depth, int pdirection);
 
 int main(int argc, string argv[])
 {
@@ -76,38 +76,41 @@ int main(int argc, string argv[])
     init();
 
     moves = 0;
+    printf("-------initial------\n");
+    draw();
+    printf("-------initial------\n");
+    godmode();
+
     // accept moves until game is won
-    while (true)
-    {
-        // clear the screen
-        clear();
+    // while (true)
+    // {
+    //     // clear the screen
+    //     clear();
 
-        // draw the current state of the board
-        draw();
+    //     // draw the current state of the board
+    //     draw();
 
-        // check for win
-        if (won())
-        {
-            printf("ftw!\n");
-            break;
-        }
+    //     // check for win
+    //     if (won())
+    //     {
+    //         printf("ftw!\n");
+    //         break;
+    //     }
 
-        // // prompt for move
-        // printf("Tile to move: ");
-        // int tile = GetInt();
+    //     // // prompt for move
+    //     printf("Tile to move: ");
+    //     int tile = GetInt();
 
-        // // move if possible, else report illegality
-        // if (!move(tile))
-        // {
-        //     printf("\nIllegal move.\n");
-        //     usleep(500000);
-        // }
+    //     // // move if possible, else report illegality
+    //     if (!move(tile))
+    //     {
+    //         printf("\nIllegal move.\n");
+    //         usleep(500000);
+    //     }
 
-        godmode();
-
-        // sleep thread for animation's sake
-        // usleep(500000);
-    }
+    //     // sleep thread for animation's sake
+    //     usleep(500000);
+    // }
 
     // success
     return 0;
@@ -191,7 +194,7 @@ int * countInversions(int arr[], int n){
  * The init follow the following steps:
  * 1. The init first generates an array of 0-15.
  * 2. Shuffle the array to a pseudorandom state seeded with the time
- * 3. Count inverions and substract the inversions of the zero pos
+ * 3. Count inverions and substract the inversions caused by the zero
  * 4. Check if the board is solvable and adjust if needed **
  * 5. Put the array to the multidimensional array of the board
  *
@@ -231,10 +234,6 @@ void init(void)
         blocks[i] = temp;
     }
     
-    // tests
-    // int blocks[16] = {12, 1, 10, 2, 7, 11, 4, 14, 5, 0, 9, 15, 8, 13, 6, 3}; // 49 inv
-    // int blocks[16] = {13, 10, 11, 6, 5, 7, 4, 8, 1, 12, 14, 9, 3, 15, 2, 0 }; // 59 inv
-    
     // Copy the array and find the 0;
     int blockscopy[n];
     int zeropos;
@@ -253,12 +252,14 @@ void init(void)
     inv -= zeropos;
 
     // Check if the board is solvable and fix it if need be
-    // This condition is clearly described above
+    // This 3-part condition is clearly described above
     if (!(((d % 2 != 0) && (inv % 2 == 0)) || 
         ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 == 0) && (inv % 2 != 0)) ||
         ((d % 2 == 0) && ((d - ((zeropos/d))) % 2 != 0) && (inv % 2 == 0)) 
         ))
     {
+        // Swaps the first inversion
+        // Introducing a new one to change the parity is probably cleaner
         for (int i = 0; i < n; i++)
         {
             if ((blocks[i] > blocks[i+1]) && (blocks[i] != 0 && blocks[i+1] != 0)){
@@ -383,31 +384,152 @@ void godmode(void)
         }
     }
 
-    searchSolution(blocks, 1);
-}
+    for (int i=1; i < 30; i++){
+        printf("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
+        searchSolution(blocks, i, 10);
+        printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
 
-
-
-bool searchSolution(int blocks[], int depth)
-{
-    // Put the array to a boardcopy
-    int boardcopy[d][d];
-    int k = 0;
-    int zpos[2] = {d, d};
-    for (int i = 0; i < d; i++)
-    {
-        for (int j = 0; j < d; j++, k++)
-        {
-            if (boardcopy[i][j] == 0){
-                zpos[0] = i;
-                zpos[1] = j;
-            }
-            boardcopy[i][j] = blocks[k];
-        }
     }
 
+}
+
+
+
+
+// This algorithm is getting nooooowhere! 7 miljard en nog steeds niks.
+bool searchSolution(int blocks[], int depth, int pdirection)
+{
+    int zerotest = 0;
+    for (int i = 0; i < d*d; i++){
+        if (blocks[i] == 0)
+        {
+            zerotest++;
+        }
+    }
+    if (zerotest > 1){
+        printf("*********More than one zero***********\n");
+        usleep(2000000);
+    }
+    // Check to stop the recursion
+    if (depth > 0){
+        // No immediate backtracking
+        if (pdirection < 2)
+        {
+            pdirection += 2;
+        } else {
+            pdirection -= 2;
+        }
+
+        // For each possible direction
+        for (int direction = 0; direction < 4; direction++)
+        {
+            // If attemt at backtracking cut it off
+            if (direction == pdirection) {
+                continue;
+            }
+            // Put the blocks to a boardcopy
+            int boardcopy[d][d];
+            int k = 0;
+            int zpos[2] = {d, d};
+            for (int i = 0; i < d; i++)
+            {
+                for (int j = 0; j < d; j++, k++)
+                {
+                    if (boardcopy[i][j] == 0){
+                        zpos[0] = i;
+                        zpos[1] = j;
+                    }
+                    boardcopy[i][j] = blocks[k];
+                }
+            }
+
+            // Moves: one for each direction
+            if (direction == 0 && zpos[0] < d - 1){
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]+1][zpos[1]];
+                boardcopy[zpos[0]+1][zpos[1]] = 0;
+            }
+            if (direction == 1 && zpos[0] > 0) {
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]-1][zpos[1]];
+                boardcopy[zpos[0]-1][zpos[1]] = 0;
+            }
+            if (direction == 2 && zpos[1] < d - 1){
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]+1];
+                boardcopy[zpos[0]][zpos[1]+1] = 0;
+            }
+            if (direction == 3 && zpos[1] > 0) {
+                boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]-1];
+                boardcopy[zpos[0]][zpos[1]-1] = 0;
+            }
+
+            // All of this is only interesting if the direction allows a move
+            if ((direction == 0 && zpos[0] < d - 1) ||
+                (direction == 1 && zpos[0] > 0) || 
+                (direction == 2 && zpos[1] < d - 1) || 
+                (direction == 3 && zpos[1] > 0)) {
+
+                // An easy measurement to count the number of tried moves
+                moves++;
+                if (moves % 10000000 == 0) {
+                    printf("moves %i \n", moves);
+                }
+                // Covert boardcopy to an array of blocks
+                int blockscopy[d*d];
+                k = 0; 
+                for (int i=0; i < d; i++)
+                {
+                    for (int j=0; j < d; j++, k++)
+                    {
+                        blockscopy[k] = boardcopy[i][j];
+                    }
+                }
+
+                clear();
+
+                // Print copy
+                printf("Depth: %i, Direction: %i\n", depth, direction);
+                for (int i=0; i < d; i++)
+                {
+                    for (int j=0; j < d; j++)
+                    {
+                        if (boardcopy[i][j] < 10)
+                        {
+                            printf(" ");
+                        }
+                        printf("%i   ", boardcopy[i][j]);
+                    }
+                    printf("\n\n");
+                }
+
+                // Check won
+                int win = 1;
+                for (int i=0; i < d*d - 1; i++){
+                    if (!(blockscopy[i] + 1 == blockscopy[i+1]))
+                    {   
+                        win = 0;
+                    }
+                }
+
+                if (win == 1){
+                    printf("\n***********************\n---WON---\n**********************\n");
+                    usleep(2000000);
+                }
+                
+                // Make the game followable
+                usleep(500000);
+
+                // Next move (recursive)
+                searchSolution(blockscopy, depth - 1, direction);   
+            }
+        }
+    }   
     return 0;
 }
+
+
+
+
+
+
 
 void randomSolution(){
     // find coordinates of zero
@@ -440,6 +562,7 @@ void randomSolution(){
             moves++;
         }
     } else {
+        // x-axis moves
         if (randBorA && zpos[1] < d - 1){
             board[zpos[0]][zpos[1]] = board[zpos[0]][zpos[1]+1];
             board[zpos[0]][zpos[1]+1] = 0;
