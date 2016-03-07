@@ -267,7 +267,8 @@ void init(void)
         // Introducing a new one to change the parity is probably cleaner
         for (int i = 0; i < n; i++)
         {
-            if ((blocks[i] > blocks[i + 1]) && (blocks[i] != 0 && blocks[i + 1] != 0)){
+            if ((blocks[i] > blocks[i + 1]) && (blocks[i] != 0 && blocks[i + 1] != 0))
+            {
                 int temp = blocks[i];
                 blocks[i] = blocks[i + 1];
                 blocks[i + 1] = temp;
