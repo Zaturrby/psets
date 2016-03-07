@@ -364,7 +364,7 @@ bool won(void)
     }
 
     // Check
-    for (int i = 0; i < d*d - 1; i++)
+    for (int i = 0; i < d * d - 1; i++)
     {
         if (!(blocks[i] + 1 == blocks[i + 1]))
         {   
@@ -393,7 +393,8 @@ void godmode(void)
     }
 
     // Start searching for the solution with a given depth in mind
-    for (int i = 1; i < 30; i++){
+    for (int i = 1; i < 30; i++)
+    {
         printf("\n\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
         searchSolution(blocks, i, 10);
         printf("\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
@@ -428,19 +429,22 @@ bool searchSolution(int blocks[], int depth, int pdirection)
     // Where-o-where do they come from?
     // Some debugging:
     int zerotest = 0;
-    for (int i = 0; i < d * d; i++){
+    for (int i = 0; i < d * d; i++)
+    {
         if (blocks[i] == 0)
         {
             zerotest++;
         }
     }
-    if (zerotest > 1){
+    if (zerotest > 1)
+    {
         printf("*********More than one zero***********\n");
         usleep(2000000);
     }
 
     // Check to stop the recursion
-    if (depth > 0){
+    if (depth > 0)
+    {
         // No backtracking of the last move, quite pointless to explore those
         // recursions
         if (pdirection < 2)
@@ -454,7 +458,8 @@ bool searchSolution(int blocks[], int depth, int pdirection)
         for (int direction = 0; direction < 4; direction++)
         {
             // If attemt at backtracking cut it off
-            if (direction == pdirection) {
+            if (direction == pdirection) 
+            {
                 continue;
             }
             // Put the blocks to a boardcopy
@@ -474,32 +479,37 @@ bool searchSolution(int blocks[], int depth, int pdirection)
             }
 
             // Moves: one for each direction
-            if (direction == 0 && zpos[0] < d - 1){
+            if (direction == 0 && zpos[0] < d - 1)
+            {
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0] + 1][zpos[1]];
                 boardcopy[zpos[0] + 1][zpos[1]] = 0;
             }
-            if (direction == 1 && zpos[0] > 0) {
+            if (direction == 1 && zpos[0] > 0) 
+            {
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0] - 1][zpos[1]];
                 boardcopy[zpos[0] - 1][zpos[1]] = 0;
             }
-            if (direction == 2 && zpos[1] < d - 1){
+            if (direction == 2 && zpos[1] < d - 1)
+            {
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]+1];
                 boardcopy[zpos[0]][zpos[1] + 1] = 0;
             }
-            if (direction == 3 && zpos[1] > 0) {
+            if (direction == 3 && zpos[1] > 0) 
+            {
                 boardcopy[zpos[0]][zpos[1]] = boardcopy[zpos[0]][zpos[1]-1];
                 boardcopy[zpos[0]][zpos[1] - 1] = 0;
             }
 
             // All of this is only interesting if the direction allows a move
-            if ((direction == 0 && zpos[0] < d - 1) ||
+            if ((direction == 0 && zpos[0] < d - 1) || 
                 (direction == 1 && zpos[0] > 0) || 
                 (direction == 2 && zpos[1] < d - 1) || 
                 (direction == 3 && zpos[1] > 0)) {
 
                 // An easy measurement to count the number of tried moves
                 moves++;
-                if (moves % 10000000 == 0) {
+                if (moves % 10000000 == 0) 
+                {
                     printf("moves %i \n", moves);
                 }
                 // Covert boardcopy to an array of blocks
@@ -532,7 +542,8 @@ bool searchSolution(int blocks[], int depth, int pdirection)
 
                 // Check won
                 int win = 1;
-                for (int i = 0; i < d * d - 1; i++){
+                for (int i = 0; i < d * d - 1; i++)
+                {
                     if (!(blockscopy[i] + 1 == blockscopy[i+1]))
                     {   
                         win = 0;
