@@ -555,7 +555,7 @@ bool searchSolution(int blocks[], int depth, int pdirection)
 
                 if (win == 1)
                 {
-                    printf("\n***********************\n---WON---\n**********************\n");
+                    printf("\n************\n---WON---\n*************\n");
                     usleep(2000000);
                 }
                 
