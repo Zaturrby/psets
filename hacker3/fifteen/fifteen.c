@@ -506,8 +506,8 @@ bool searchSolution(int blocks[], int depth, int pdirection)
             if ((direction == 0 && zpos[0] < d - 1) || 
                 (direction == 1 && zpos[0] > 0) || 
                 (direction == 2 && zpos[1] < d - 1) || 
-                (direction == 3 && zpos[1] > 0)) {
-
+                (direction == 3 && zpos[1] > 0)) 
+            {
                 // An easy measurement to count the number of tried moves
                 moves++;
                 if (moves % 10000000 == 0) 
@@ -515,11 +515,11 @@ bool searchSolution(int blocks[], int depth, int pdirection)
                     printf("moves %i \n", moves);
                 }
                 // Covert boardcopy to an array of blocks
-                int blockscopy[d*d];
+                int blockscopy[d * d];
                 k = 0; 
-                for (int i=0; i < d; i++)
+                for (int i = 0; i < d; i++)
                 {
-                    for (int j=0; j < d; j++, k++)
+                    for (int j = 0; j < d; j++, k++)
                     {
                         blockscopy[k] = boardcopy[i][j];
                     }
