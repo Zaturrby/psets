@@ -320,11 +320,13 @@ bool move(int tile)
     {
         for (int j=0; j < d; j++)
         {
-            if (board[i][j] == 0){
+            if (board[i][j] == 0)
+            {
                 zpos[0] = i;
                 zpos[1] = j;
             }
-            if (board[i][j] == tile){
+            if (board[i][j] == tile)
+            {
                 tpos[0] = i;
                 tpos[1] = j;
             }
@@ -334,7 +336,8 @@ bool move(int tile)
     // Swap if distance is 1
     // Illegal moves impossible: initial positions are larger than the board
     int distance = ceil(sqrt(pow((zpos[0] - tpos[0]), 2) + pow((zpos[1] - tpos[1]), 2)));
-    if (distance == 1){
+    if (distance == 1)
+    {
         board[zpos[0]][zpos[1]] = board[tpos[0]][tpos[1]];
         board[tpos[0]][tpos[1]] = 0;
         return true;
@@ -350,7 +353,7 @@ bool move(int tile)
 bool won(void)
 {
     // Covert to single dimension
-    int blocks[d*d];
+    int blocks[d * d];
     int k = 0; 
     for (int i=0; i < d; i++)
     {
@@ -361,7 +364,8 @@ bool won(void)
     }
 
     // Check
-    for (int i = 0; i < d*d - 1; i++){
+    for (int i = 0; i < d*d - 1; i++)
+    {
         if (!(blocks[i] + 1 == blocks[i + 1]))
         {   
             return false;
