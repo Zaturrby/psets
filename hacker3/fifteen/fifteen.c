@@ -145,25 +145,25 @@ int * countInversions(int arr[], int n)
     {   
         // enter recursion
         int leftArr[n / 2];
-        int rightArr[(int)ceil(((float)n) / 2)];
+        int rightArr[(int) ceil(((float) n) / 2)];
         for (int i = 0; i < n; i++)
         {
             if (i < n/2)
             {
                 leftArr[i] = arr[i];
             } else {
-                rightArr[(int)ceil(i-((float)n / 2))] = arr[i];
+                rightArr[(int) ceil(i-((float) n / 2))] = arr[i];
             }
         }
         countInversions(leftArr, n / 2);
-        countInversions(rightArr, (int)ceil(((float)n) / 2));
+        countInversions(rightArr, (int) ceil(((float) n) / 2));
     
         // merge
         int left = 0;
         int right = 0;
         for (int i = 0; i < n; i++)
         {
-            if (left < n / 2 && right < (int)ceil(((float)n) / 2))
+            if (left < n / 2 && right < (int) ceil(((float)n) / 2))
             {
                 if (leftArr[left] > rightArr[right])
                 {
