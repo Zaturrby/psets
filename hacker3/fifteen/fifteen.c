@@ -139,7 +139,8 @@ void greet(void)
 /**
  * Algorithm to merge sort ánd to count inversions to the global scope
  */
-int * countInversions(int arr[], int n){
+int * countInversions(int arr[], int n)
+{
     if (n > 1) 
     {   
         // enter recursion
