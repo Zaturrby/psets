@@ -244,7 +244,8 @@ void init(void)
     for (int i = 0; i < n; i++)
     {
         blockscopy[i] = blocks[i];
-        if (blocks[i] == 0){
+        if (blocks[i] == 0)
+        {
             zeropos = i;
         } 
     }
@@ -252,13 +253,13 @@ void init(void)
     // Count the inversions in a global variable (inv) 
     // and subtract the inversions caused by the 0
     inv = 0;
-    countInversions(blockscopy, d*d);
+    countInversions(blockscopy, d * d);
     inv -= zeropos;
 
     // Check if the board is solvable and fix it if need be
     // This 3-part condition is clearly described above
     if (!(((d % 2 != 0) && (inv % 2 == 0)) || 
-        ((d % 2 == 0) && ((d - ((zeropos / d))) % 2 == 0) && (inv % 2 != 0)) ||
+        ((d % 2 == 0) && ((d - ((zeropos / d))) % 2 == 0) && (inv % 2 != 0)) || 
         ((d % 2 == 0) && ((d - ((zeropos / d))) % 2 != 0) && (inv % 2 == 0)) 
         ))
     {
