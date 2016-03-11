@@ -61,26 +61,34 @@ int main(int argc, char* argv[])
         return 4;
     }
 
+    BITMAPFILEHEADER bfOut = bf;
+    BITMAPINFOHEADER biOut = bi;
+
+    // determine image size in pixels
+    biOut.biWidth *= resizeFactor;
+    biOut.biHeight *= resizeFactor;
+
     // determine padding for scanlines
     int padding =  (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+    int paddingOut =  (4 - (biOut.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
 
-    bi.biWidth *= resizeFactor;
-    bi.biHeight *= resizeFactor;
-    bi.biSize = abs(bi.biWidth * bi.biHeight) + abs(bi.biHeight * padding);
-    bf.bfSize = 54 + bi.biSize;
+    // determine image size in bytes
+    biOut.biSizeImage = abs(biOut.biWidth * biOut.biHeight * 3 ) + abs(biOut.biHeight * paddingOut);
+    bfOut.bfSize = 54 + biOut.biSize;
 
     // write outfile's BITMAPFILEHEADER
-    fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
+    fwrite(&bfOut, sizeof(BITMAPFILEHEADER), 1, outptr);
 
     // write outfile's BITMAPINFOHEADER
-    fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
+    fwrite(&biOut, sizeof(BITMAPINFOHEADER), 1, outptr);
 
     // iterate over infile's scanlines
-    int ireloop = 0;
-    for (int i = 0, biHeight = abs(bi.biHeight/resizeFactor); i < biHeight; i++, ireloop++)
+    int ireloop = 1;
+    for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++, ireloop++)
     {
+
         // iterate over pixels in scanline
-        for (int j = 0; j < bi.biWidth/resizeFactor; j++)
+        for (int j = 0; j < bi.biWidth; j++)
         {
             // temporary storage
             RGBTRIPLE triple;
@@ -100,17 +108,18 @@ int main(int argc, char* argv[])
         fseek(inptr, padding, SEEK_CUR);
 
         // then add it back (to demonstrate how)
-        for (int k = 0; k < padding; k++)
+        for (int k = 0; k < paddingOut; k++)
         {
             fputc(0x00, outptr);
         }
 
         if (ireloop < resizeFactor){
             i--;
-            fseek(inptr, (-1)*(bi.biWidth * sizeof(RGBTRIPLE) + padding), SEEK_CUR);
+            fseek(inptr, -((int)(bi.biWidth * sizeof(RGBTRIPLE) + padding)), SEEK_CUR);
         } else {
             ireloop = 0;
         }
+
     }
 
     // close infile
