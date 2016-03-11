@@ -86,7 +86,8 @@ int main(int argc, char* argv[])
             {
                 triple.rgbtGreen = 255;
                 triple.rgbtBlue = 255;
-                if (j > 0){
+                if (j > 0)
+                {
                     triple = prevtriple;
                 }
             } else 
