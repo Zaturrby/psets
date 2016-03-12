@@ -21,8 +21,15 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    // remember filenames
+    // Check factor
     int resizeFactor = atoi(argv[1]);
+    if (!(resizeFactor < 101 && resizeFactor > 0))
+    {
+        printf("The factor is not quite right: %i \n", resizeFactor);
+        return 1;
+    }
+
+    // remember filenames
     char* infile = argv[2];
     char* outfile = argv[3];
 
@@ -113,13 +120,14 @@ int main(int argc, char* argv[])
             fputc(0x00, outptr);
         }
 
-        if (ireloop < resizeFactor){
+        if (ireloop < resizeFactor)
+        {
             i--;
-            fseek(inptr, -((int)(bi.biWidth * sizeof(RGBTRIPLE) + padding)), SEEK_CUR);
-        } else {
+            fseek(inptr, -((int) (bi.biWidth * sizeof(RGBTRIPLE) + padding)), SEEK_CUR);
+        } else 
+        {
             ireloop = 0;
         }
-
     }
 
     // close infile

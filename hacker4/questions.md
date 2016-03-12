@@ -78,7 +78,7 @@ Multiple reasons, the file might not exist or something else might have gone wro
 
 # Question 14: Why is fread always 1
 
-The stream is read with one byte at a time. It makes sense because the minimum unit of a bitmap might be 1 bit. Although it could be different for the headers because the size is known, this remains the safest and easiest way.
+One item of sizeof(..) is read at a time. Because the definition of the unit to read is known beforehand, it can be mapped one to one with a struct. 
 
 # Question 15: Padding if bit width is 3
 
