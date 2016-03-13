@@ -27,7 +27,8 @@ int main(int argc, char* argv[])
     {
         signatureRead = fread(&signature, 1, 3, file);
         
-        if (signatureRead != 3) {
+        if (signatureRead != 3) 
+        {
             break;
         }
 
@@ -74,11 +75,11 @@ int main(int argc, char* argv[])
                     prev = this;
                 }
             }
-          // close the imagefile
-          fclose(imgfile);
+            // close the imagefile
+            fclose(imgfile);
 
-          // next image
-          filenum++;
+            // next image
+            filenum++;
         } else 
         {
             // no image this block: skip (all are block aligned)
