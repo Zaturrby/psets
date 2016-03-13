@@ -20,18 +20,24 @@ int main(int argc, char* argv[])
   BYTE signature[3] = {0,0,0};
 
   // loop over the blocks while there is something to read
-  int itemsread = 3;
-  int filenum = 1;
-  while (itemsread == 3)
+  int signatureRead;
+  int filenum = 0;
+
+  while('true') 
   {
-    itemsread = fread(&signature, 1, 3, file);
-    // check if image
+    signatureRead = fread(&signature, 1, 3, file);
+    
+    if (signatureRead != 3) {
+      break;
+    }
+
+    // check if image ffd8ff
     if (
       signature[0] == 0xff && 
       signature[1] == 0xd8 && 
       signature[2] == 0xff)
     {
-      // found an block aligned image -> let's start over    
+      // start over      
       fseek(file, -3, SEEK_CUR);
 
       // prepare the write file
@@ -40,15 +46,16 @@ int main(int argc, char* argv[])
       filename[1] = ((filenum / 10) % 10) + '0';
       filename[2] = (filenum % 10) + '0';
 
-      printf("filename: %s, filenum: %i \n", filename, filenum);
+      // printf("filename: %s, filenum: %i \n", filename, filenum);
       
       FILE* imgfile = fopen(filename, "w");
 
       // loop over the blocks
       int EOI = 0;
       BYTE prev = 0;
-      BYTE this = 0;      
-      while (EOI == 0 && itemsread == 3)
+      BYTE this = 0;    
+      int bytesread = 1;  
+      while (EOI == 0 && bytesread == 1)
       {
         // loop over the bytes in the block
         for (int i = 0; i < 512; i++)
@@ -56,28 +63,32 @@ int main(int argc, char* argv[])
           // read the current byte, and if they form a marker
           // with the previous byte, inform the outer while 
           // loop that it's done. 
-          fread(&this, 1, 1, file);
+          bytesread = fread(&this, 1, 1, file);
           if(prev == 0xff && this == 0xd9)
           {
-            filenum++;
             EOI = 1;
           }
 
           // write the byte away, this includes some trailing zeroes
           fwrite(&this, 1, 1, imgfile);
 
-          // remember the byte to be able to find marker
+          // remember the byte to be able to find the 
+          // double byte marker
           prev = this;
         }
       }
-      // Close the imagefile
+      // close the imagefile
       fclose(imgfile);
+
+      // next image
+      filenum++;
     } else 
     {
-      // no image this block: skip
+      // no image this block: skip (all are block aligned)
       fseek(file, 509, SEEK_CUR);
     }
+    // printf("signature %i", signatureRead);  
   }
-}
 
-// fwrite(&triple, 512, 1, outptr);
+  fclose(file);
+}
