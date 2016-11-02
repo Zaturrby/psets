@@ -53,3 +53,8 @@ PERSON* sort(PERSON to_sort[])
 
 	return 0;
 } 
+
+
+int const hello = 2;
+hello = 3;
+
